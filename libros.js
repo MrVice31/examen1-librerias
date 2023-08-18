@@ -8,10 +8,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const router = express.Router();
-const mongoConnection =
+const DB_URL =
   "mongodb+srv://MrVice31:Dragonzord2000@cluster0.90xjp7b.mongodb.net/Libreria?retryWrites=true&w=majority";
 
-mongoose.connect(mongoConnection).catch((err) => console.error("Error :", err));
+mongoose.connect(DB_URL).catch((err) => console.error(err));
 
 const librosSchema = new mongoose.Schema(
   {
@@ -60,7 +60,7 @@ router.post("/libros", async (req, res) => {
       !ObjectId.isValid(req.body.user) &&
       !ObjectId.isValid(req.body.branch)
     ) {
-      return res.status(400).send("El no es válido");
+      return res.status(400).send("El nombre no es válido");
     }
     const newBook = new Libros({
       bookName: req.body.bookName,
@@ -73,7 +73,6 @@ router.post("/libros", async (req, res) => {
     const savedBook = await newBook.save();
     res.status(201).json(savedBook);
   } catch (error) {
-    console.log(error);
     res.status(500).send("Error");
   }
 });
@@ -98,7 +97,6 @@ router.put("/libros/:id", async (req, res) => {
       res.status(404).send("Libro no encontrado");
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send("Error");
   }
 });

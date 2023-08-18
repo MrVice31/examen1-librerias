@@ -5,10 +5,13 @@ const sucursales = require("./sucursales");
 
 const bodyParser = require("body-parser");
 const app = express();
+const PORT = 3000;
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.listen(3000, () => {
-  console.log("La aplicación está funcionando en el puerto 3000");
+
+app.listen(PORT, () => {
+  console.log(`Corriendo en el puerto: ${PORT}`);
 });
 
 app.use("/", usuarios);

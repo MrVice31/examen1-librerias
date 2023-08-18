@@ -8,10 +8,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const router = express.Router();
-const mongoConnection =
+const DB_URL =
   "mongodb+srv://MrVice31:Dragonzord2000@cluster0.90xjp7b.mongodb.net/Libreria?retryWrites=true&w=majority";
 
-mongoose.connect(mongoConnection).catch((err) => console.error("Error :", err));
+mongoose.connect(DB_URL).catch((err) => console.error(err));
 const sucursalSchema = new mongoose.Schema(
   {
     branchName: {
@@ -38,7 +38,7 @@ router.get("/sucursales/all", async (req, res) => {
     res.status(200).json(sucursales);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error en la base de datos 500");
+    res.status(500).send("500");
   }
 });
 

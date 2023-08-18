@@ -11,10 +11,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const router = express.Router();
-const mongoConnection =
+const DB_URL =
   "mongodb+srv://MrVice31:Dragonzord2000@cluster0.90xjp7b.mongodb.net/Libreria?retryWrites=true&w=majority";
 
-mongoose.connect(mongoConnection).catch((err) => console.error("Error :", err));
+mongoose
+  .connect(DB_URL)
+  .catch((err) => console.error("Error conectandose a la bd, mensaje:", err));
 const usuarioSchema = new mongoose.Schema(
   {
     name: {
@@ -53,7 +55,7 @@ router.get("/usuarios/all", async (req, res) => {
     res.status(200).json(usuarios);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error en la base de datos 500");
+    res.status(500).send("Respuesta del servidor 500");
   }
 });
 
@@ -72,7 +74,7 @@ router.post("/usuarios", async (req, res) => {
     res.status(201).json(savedUser);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error al encriptar la contraseña");
+    res.status(500).send("Error en el servidor codigo 500");
   }
 });
 
@@ -98,11 +100,11 @@ router.put("/usuarios/:userId", async (req, res) => {
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(404).send("Usuario no encontrado");
+      res.status(404).send("No usuarios con este nombre");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error al encriptar la contraseña");
+    res.status(500).send("Error 500 en el servidor");
   }
 });
 
@@ -110,13 +112,15 @@ router.delete("/usuarios/:id", async (req, res) => {
   try {
     const user = await Usuarios.findByIdAndDelete(req.params.id);
     if (user) {
-      res.status(200).json({ message: "Usuario eliminado exitosamente" });
+      res.status(200).json({
+        message: `Se ha eliminado el usuario con id: ${req.params.id}`,
+      });
     } else {
-      res.status(404).send("Usuario no encontrado");
+      res.status(404).send("No se ha encontrado usuario con este id");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error en la base de datos ");
+    res.status(500).send("Error detectado 500");
   }
 });
 
